@@ -5,11 +5,13 @@ import SignInForms from "./_auth/forms/SignInForms";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Home } from "./_root/pages";
+import { Toaster } from "./components/ui/toaster";
 
 
 function App() {
   return (
     <main className="flex h-screen">
+     
       <Routes>
         {/* Public Route */}
         <Route element={<AuthLayout />}>
@@ -22,6 +24,7 @@ function App() {
           <Route index element={<Home />} />
         </Route>
       </Routes>
+      <Toaster/>
     </main>
   );
 }
