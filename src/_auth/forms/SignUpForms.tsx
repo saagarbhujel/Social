@@ -2,6 +2,8 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link} from "react-router-dom";
+import { useUserContext } from "@/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,9 +17,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { SignUpValidation } from "@/lib/validation";
 import Loader from "@/components/shared/Loader";
+import { useToast } from "@/components/ui/use-toast"
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations";
+
 
 const SignUpForms = () => {
-  const isloading = false;
+  const {checkAuthUser, isLoading: isUserLoading} = useUserContext()
+  const navigate = useNavigate()
+
+  // Mutation
+  const {mutateAsync: createNewUser, isPending: isUserCreating} = useCreateUserAccount()
+  const {mutateAsync: signInAccount, isPending: isSigningInUser } = useSignInAccount()
+  
+  const {toast} = useToast()
+
+ 
   // 1. Define your form.
   const form = useForm<z.infer<typeof SignUpValidation>>({
     resolver: zodResolver(SignUpValidation),
@@ -30,10 +44,39 @@ const SignUpForms = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof SignUpValidation>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+ async function onSubmit(user: z.infer<typeof SignUpValidation>) {
+  try{
+    const newUser = await createNewUser(user)
+
+    if(!newUser) {
+      return toast({
+        title: "Signup Failed. Please try again.",
+      })
+    }
+
+    const session = await signInAccount({ email: user.email, password: user.password });
+    if(!session){
+      toast({title: "Signin Failed. Please try again."})
+      navigate('/sign-in')
+
+      return 
+    }
+
+    const isLoddedIn = await checkAuthUser()
+
+    if(isLoddedIn){
+      form.reset()
+
+      navigate('/');
+    } else {
+      toast({title: 'Signin Failed. Please try again.'})
+      return;
+    }
+  } catch (error) {
+      console.log(error);
+      
+    }
+    
   }
   
 
@@ -110,7 +153,7 @@ const SignUpForms = () => {
               )}
             />
             <Button type="submit" className="shad-button_primary">{
-              isloading ? (
+              (isUserCreating || isSigningInUser || isUserLoading) ? (
                 <div className="flex-center gap-2">
                   <Loader /> Loading...
                 </div>
