@@ -76,8 +76,6 @@ const SignInForms = () => {
             onSubmit={form.handleSubmit(handleSignin)}
             className="flex flex-col gap-5 w-full mt-4"
           >
-          
-
             <FormField
               control={form.control}
               name="email"
@@ -112,7 +110,7 @@ const SignInForms = () => {
               ) : "SignIn"
             }</Button>
             <p className=" text-small-regular text-light-2 text-center mt-2">
-              Already have an account?
+              Didn&apos;t have an account?
               <Link to='/sign-up' className="text-primary-500 text-small-semibold ml-1">SignUp</Link>
             </p>
           </form>
