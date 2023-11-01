@@ -15,3 +15,8 @@ export type IUser ={
     bio: string;
 }
 
+export type INavLink ={
+    imageUrl: string;
+    route: string;
+    label: string;
+}
