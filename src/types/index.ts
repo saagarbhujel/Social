@@ -20,3 +20,12 @@ export type INavLink ={
     route: string;
     label: string;
 }
+
+export type INewPost = {
+    userId: string;
+    caption: string;
+    file: File[];
+    location?: string;
+    tags?: string;
+
+}
