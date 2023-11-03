@@ -20,7 +20,8 @@ import { PostValidation } from "@/lib/validation";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "@/context/AuthContext";
 import { useToast } from "../ui/use-toast";
-import { createPost } from "@/lib/appwrite/api";
+import { useCreatePost } from "@/lib/react-query/queriesAndMutations";
+import Loader from "../shared/Loader";
 
 type PostFormProps = {
   post?: Models.Document;
@@ -31,6 +32,8 @@ const PostForm = ({ post, action }: PostFormProps) => {
   const navigate = useNavigate();
   const { user } = useUserContext();
   const { toast } = useToast();
+
+  const {mutateAsync: createPost, isPending:isCreatePostLoading} = useCreatePost();
 
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
@@ -141,8 +144,10 @@ const PostForm = ({ post, action }: PostFormProps) => {
           </Button>
           <Button
             className="shad-button_primary whitespace-nowrap"
+            disabled= {isCreatePostLoading}
             type="submit"
           >
+            {isCreatePostLoading && <Loader/>}
             {action} Post
           </Button>
         </div>
