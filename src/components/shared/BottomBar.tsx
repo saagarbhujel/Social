@@ -10,10 +10,10 @@ const BottomBar = () => {
   return (
     <section className="bottom-bar">
       {
-        botombarLinks.map((link)=>{
+        botombarLinks.map((link, index)=>{
           const isActive = link.route === pathname
           return (
-            <Link to={link.route} className={`${isActive && " rounded-[10px] bg-primary-500"} flex-center flex-col gap-1 p-2 transition`} >
+            <Link key={index} to={link.route} className={`${isActive && " rounded-[10px] bg-primary-500"} flex-center flex-col gap-1 p-2 transition`} >
             <img src={link.imgURL} alt="icons" className={`${isActive && "invert-white"}`} />
             <p className=" tiny-medium text-light-2">{link.label}</p>
             </Link>
