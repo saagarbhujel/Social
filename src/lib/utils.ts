@@ -39,3 +39,7 @@ export function formatDate(date: string): string {
     return "year ago";
   }
 }
+
+export const checkIsLiked = (likesList: string[], userId: string) => {
+  return likesList.includes(userId);
+}
