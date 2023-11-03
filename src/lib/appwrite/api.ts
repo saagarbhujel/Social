@@ -217,3 +217,80 @@ export const getRecentPost = async () => {
     
   }
 }
+
+// ============================== like post
+export const likePost = async (postId: string, likesArray: string[]) => {
+ try {
+  const updatedPost = await databases.updateDocument(
+    appwriteConfig.databaseId,
+    appwriteConfig.postCollectionId,
+    postId,
+    {
+      likes: likesArray
+    }
+  )
+  if(!updatedPost) throw Error;
+  return updatedPost;
+ } catch (error) {
+  console.log(error);
+  
+ }
+}
+
+
+// ============================== SAVED POST
+export const savePost = async (postId: string, userId: string) => {
+  try {
+    const updatePost = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      ID.unique(),
+      {
+        users: userId, 
+        post: postId
+      }
+    )
+
+    if(!updatePost) throw Error;
+    return updatePost;
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
+
+// ============================== DELETE SAVED POST
+export const deleteSavedPost = async (savedRecordId: string) => {
+  try {
+    const statusCode = await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      savedRecordId,
+    )
+    if(!statusCode) throw Error;
+    return {status: "Ok"};
+  } catch (error) {
+    console.log(error);
+    
+  }
+
+}
+
+// ============================== GET POST BY ID
+
+export const getPostById = async (postId?: string) => {
+  if(!postId) throw Error;
+
+  try {
+    const post = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      postId
+    )
+    if(!post) throw Error;
+    return post;
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
