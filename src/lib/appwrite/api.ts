@@ -171,9 +171,9 @@ export const uploadFile = async (file: File) => {
 };
 
 // ============================== GET FILE URL
-export const getFilePreview = async (fileId: string) => {
+export const getFilePreview = (fileId: string) => {
   try {
-    const fileUrl = await storage.getFilePreview(
+    const fileUrl =  storage.getFilePreview(
       appwriteConfig.storageId,
       fileId,
       2000,
@@ -198,3 +198,22 @@ export const deleteFile = async (fileId: string) => {
     console.log(error);
   }
 };
+
+
+// ============================== GET RECENT POST
+export const getRecentPost = async () => {
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.orderDesc('$createdAt'), Query.limit(20)]
+    )
+
+    if(!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
