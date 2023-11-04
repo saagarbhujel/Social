@@ -29,3 +29,13 @@ export type INewPost = {
     tags?: string;
 
 }
+
+export type IUpdatePost = {
+    postId: string;
+    caption: string;
+    imageUrl: URL;
+    imageId: string;
+    file: File[];
+    location?: string;
+    tags?: string;
+}
