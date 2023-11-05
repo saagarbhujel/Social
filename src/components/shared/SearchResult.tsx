@@ -4,7 +4,7 @@ import GridPostList from './GridPostList'
 
 type SearchResultProps = {
   isSearchFetching: boolean,
-  searchedPost: Models.Document[]
+  searchedPost: any
 }
 
 const SearchResult = ({isSearchFetching, searchedPost}: SearchResultProps) => {
