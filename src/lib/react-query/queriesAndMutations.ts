@@ -12,6 +12,7 @@ import {
   deleteSavedPost,
   getCurrentUser,
   getInfinitePosts,
+  getInfiniteUsers,
   getPostById,
   getRecentPost,
   likePost,
@@ -222,5 +223,25 @@ export const useSearchPosts = (searchTerm: string) => {
     queryKey: [QUERY_KEYS.SEARCH_POSTS, searchTerm],
     queryFn: ()=> searchPost(searchTerm),
     enabled: !!searchTerm,
+  })
+}
+
+
+// ============================================================GET Users
+export const useGetUsers = () => {
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_USERS],
+    queryFn: getInfiniteUsers,
+    getNextPageParam: (lastPage: any) =>{
+        // If there's no data, there are no more pages.
+        if (lastPage && lastPage.documents.length === 0) {
+          return null;
+        }
+  
+        // Use the $id of the last document as the cursor.
+        const lastId = lastPage.documents[lastPage.documents.length - 1].$id;
+        return lastId;
+    },
+    initialPageParam: 0 // Add this line
   })
 }
