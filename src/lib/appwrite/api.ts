@@ -347,20 +347,60 @@ export const updatePost = async (post: IUpdatePost) => {
   }
 };
 
-
 // deletePost
-export const deletePost = async(postId: string, imageId: string) => {
-  if(!postId || !imageId) throw Error;
+export const deletePost = async (postId: string, imageId: string) => {
+  if (!postId || !imageId) throw Error;
 
   try {
     await databases.deleteDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
-      postId,
-    )
-    return {status: "Ok"}
+      postId
+    );
+    return { status: "Ok" };
   } catch (error) {
     console.log(error);
-    
   }
-}
+};
+
+// infinite post
+export const getInfinitePosts = async ({
+  pageParam,
+}: {
+  pageParam: number;
+}) => {
+  const queries: any[] = [Query.orderDesc("$updatedAt"), Query.limit(10)];
+
+  if (pageParam) {
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      queries
+    );
+    if (!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// ============================================================SEARCH POST
+export const searchPost = async (searchTerm: string) => {
+  try {
+    const posts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.search("caption", searchTerm)]
+    );
+    if (!posts) throw Error;
+
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+};
