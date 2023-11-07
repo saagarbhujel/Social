@@ -15,6 +15,7 @@ import {
   getInfiniteUsers,
   getPostById,
   getRecentPost,
+  getUserById,
   likePost,
   savePost,
   searchPost,
@@ -153,6 +154,15 @@ export const useGetCurrentUser = () => {
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
         queryFn: getCurrentUser,
     })
+}
+
+// ============================================================ GET CURRENT USER BY ID
+export const useGetUserById = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_BY_ID, userId],
+    queryFn:()=> getUserById(userId),
+    enabled: !!userId,
+  })
 }
 
 // ============================================================GET POST BY ID
