@@ -37,7 +37,6 @@ const Profile = () => {
       },
     }))
     .reverse();
-  console.log(posts);
 
   return (
     <div className="profile-container">
