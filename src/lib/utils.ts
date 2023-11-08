@@ -39,3 +39,6 @@ export function formatDate(date?: string): string  {
 export const checkIsLiked = (likesList: string[], userId: string) => {
   return likesList.includes(userId);
 }
+
+//==========================================convert file to url
+export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
