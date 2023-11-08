@@ -21,3 +21,14 @@ export const SignUpValidation = z.object({
     tags: z.string()
 
   })
+
+  export const ProfileValidation = z.object({
+    file: z.custom<File[]>(),
+    name: z.string().min(4, {message: "Name must be at least 4 characters."}),
+    username: z.string().min(4, {
+      message: "Username must be at least 4 characters.",
+    }),
+    email: z.string().email(),
+    bio: z.string()
+
+  })
