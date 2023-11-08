@@ -1,4 +1,4 @@
-import { INewPost, INewUser, IUpdatePost } from "@/types";
+import { INewPost, INewUser, IUpdatePost, IUpdateUser } from "@/types";
 import {
   useQuery,
   useMutation,
@@ -22,6 +22,7 @@ import {
   signInAccount,
   signOutAccount,
   updatePost,
+  updateUser,
 } from "../appwrite/api";
 import { QUERY_KEYS } from "./QueryKeys";
 
@@ -212,6 +213,7 @@ export const useGetPosts = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
     queryFn: getInfinitePosts,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getNextPageParam: (lastPage: any) =>{
         // If there's no data, there are no more pages.
         if (lastPage && lastPage.documents.length === 0) {
@@ -242,6 +244,7 @@ export const useGetUsers = () => {
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
     queryFn: getInfiniteUsers,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getNextPageParam: (lastPage: any) =>{
         // If there's no data, there are no more pages.
         if (lastPage && lastPage.documents.length === 0) {
@@ -253,5 +256,22 @@ export const useGetUsers = () => {
         return lastId;
     },
     initialPageParam: 0 // Add this line
+  })
+}
+
+
+// ============================================================Update User
+export const useUpdateUser = ()=>{
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn:(user: IUpdateUser)=> updateUser(user),
+    onSuccess: (data) =>{
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER]
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id]
+      })
+    }
   })
 }
