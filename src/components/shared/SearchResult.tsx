@@ -1,4 +1,5 @@
-import { Models } from 'appwrite'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import Loader from './Loader'
 import GridPostList from './GridPostList'
 

@@ -1,7 +1,7 @@
 import Loader from '@/components/shared/Loader'
 import UserCard from '@/components/shared/UserCard'
 import { useGetUsers } from '@/lib/react-query/queriesAndMutations'
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const AllUser = () => {
